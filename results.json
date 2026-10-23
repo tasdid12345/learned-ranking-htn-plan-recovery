@@ -1,0 +1,34 @@
+{
+  "question": "Can a LightGBM model that ranks recovery options reduce the symbolic search effort needed to repair a broken hierarchical plan, compared with trying options in a fixed library order?",
+  "method": "Simulated grid-world HTN plan failures; 12 candidate recovery methods checked by a BFS planner; LightGBM predicts which options succeed and options are tried in ranked order.",
+  "dataset": {
+    "name": "Simulated grid-world HTN plan-failure episodes (seeded)",
+    "source_url": "generated in analysis.py (no download)",
+    "n_rows": 4000,
+    "n_train": 2800,
+    "n_test": 1200,
+    "same_as_paper": false,
+    "baseline_is_papers_method": false
+  },
+  "metric_name": "mean node expansions until a valid recovery is found (lower is better)",
+  "higher_is_better": false,
+  "baseline": "Standard symbolic recovery stand-in: try the 12 recovery methods in fixed library order, then fall back to a full replan.",
+  "improved": "Class-balanced, grouped-CV-tuned LightGBM predicts option success from state/failure/option features; options are tried in ranked order with the same planner, costs and full-replan fallback.",
+  "metrics": {
+    "baseline_score": 228.28333333333333,
+    "improved_score": 134.3075,
+    "improvement": 93.97583333333333,
+    "baseline_score_std": 0.0,
+    "improved_score_std": 0.0,
+    "baseline_success_rate": 0.6966666666666667,
+    "improved_success_rate": 0.9383333333333334,
+    "improved_success_rate_std": 0.0,
+    "baseline_first_option_works": 0.37083333333333335,
+    "improved_first_option_works": 0.9533333333333335,
+    "improved_first_option_works_std": 1.1102230246251565e-16,
+    "improved_option_auc": 0.9926578196973019,
+    "share_episodes_with_valid_option_test": 0.9641666666666666,
+    "expansion_budget": 250.0
+  },
+  "notes": "Synthetic data: results depend on the simulator design (grid size, wall shapes, length bound 1.25x optimal+1, arbitrary fixed library order) and say nothing about the paper's system. Option costs are precomputed once per episode and shared by both methods. Baseline is deterministic (std 0); LightGBM std is over seeds 42-43-44 with hyper-parameters tuned once (seed 42) on training episodes. Budget is a fixed constant, not tuned."
+}
